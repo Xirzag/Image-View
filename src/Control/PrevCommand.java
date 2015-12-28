@@ -1,18 +1,23 @@
 package Control;
 
 import Model.Image;
-import Ui.ImageDisplay;
+import Model.NoImageException;
+import View.Ui.ApplicationDisplay;
 
 public class PrevCommand implements Command {
-    private final ImageDisplay imagePanel;
+    private final ApplicationDisplay applicationDisplay;
 
-    public PrevCommand(ImageDisplay imagePanel) {
-        this.imagePanel = imagePanel;
+    public PrevCommand(ApplicationDisplay applicationDisplay) {
+        this.applicationDisplay = applicationDisplay;
     }
-
     @Override
     public void execute() {
-        Image image = imagePanel.getImage();
-        imagePanel.show(image.prev());
+        try {
+            Image imageToDisplay = applicationDisplay.getImageDisplay().getImage().prev();
+            applicationDisplay.getImageDisplay().show(imageToDisplay);
+            applicationDisplay.setTitle(imageToDisplay.getName());
+        } catch (NoImageException e) {
+
+        }
     }
 }

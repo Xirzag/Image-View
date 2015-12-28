@@ -1,10 +1,9 @@
 package Model;
 
-import java.awt.image.BufferedImage;
-
 public interface Image {
-    Image next();
-    Image prev();
-    BufferedImage bitmap();
+    Image next() throws NoImageException;
+    Image prev() throws NoImageException;
+    Object bitmap();
     String getName();
+    Dimension dimension();
 }

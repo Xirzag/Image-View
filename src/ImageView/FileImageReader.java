@@ -1,7 +1,9 @@
 package ImageView;
 
+import Model.Dimension;
 import Model.Image;
-import Persistance.ImageReader;
+import Model.NoImageException;
+import View.Persistance.ImageReader;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -29,16 +31,16 @@ public class FileImageReader implements ImageReader {
         });
     }
 
-    public Image getImage(final int index){
-        if(index < 0 || index >= images.length) return null;
+    public Image getImage(final int index) throws NoImageException {
+        if(images==null || index < 0 || index >= images.length) throw new NoImageException();
         return new Image() {
             @Override
-            public Image next() {
+            public Image next() throws NoImageException {
                 return (index >= images.length-1)? getImage(0) : getImage(index+1);
             }
 
             @Override
-            public Image prev() {
+            public Image prev() throws NoImageException {
                 return (index <= 0)? getImage(images.length-1) : getImage(index-1);
             }
 
@@ -46,7 +48,7 @@ public class FileImageReader implements ImageReader {
             public BufferedImage bitmap() {
                 try {
                     return ImageIO.read(images[index]);
-                } catch (IOException e) {;
+                } catch (IOException e) {
                     return null;
                 }
             }
@@ -54,6 +56,18 @@ public class FileImageReader implements ImageReader {
             @Override
             public String getName() {
                 return images[index].getName();
+            }
+
+            @Override
+            public Dimension dimension() {
+                try {
+                    Dimension dimension = new Dimension(ImageIO.read(images[index]).getWidth(),
+                            ImageIO.read(images[index]).getHeight());
+                    return dimension;
+                } catch (IOException e) {
+                    return new Dimension(0,0);
+                }
+
             }
         };
     }

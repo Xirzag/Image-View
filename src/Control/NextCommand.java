@@ -1,18 +1,26 @@
 package Control;
 
 import Model.Image;
-import Ui.ImageDisplay;
+import Model.NoImageException;
+import View.Ui.ApplicationDisplay;
 
 public class NextCommand implements Command{
-    private final ImageDisplay imagePanel;
+    private final ApplicationDisplay applicationDisplay;
 
-    public NextCommand(ImageDisplay imagePanel) {
-        this.imagePanel = imagePanel;
+    public NextCommand(ApplicationDisplay applicationDisplay) {
+        this.applicationDisplay = applicationDisplay;
     }
 
     @Override
     public void execute() {
-        Image image = imagePanel.getImage();
-        imagePanel.show(image.next());
+        try {
+            Image imageToDisplay = applicationDisplay.getImageDisplay().getImage().next();
+            applicationDisplay.getImageDisplay().show(imageToDisplay);
+            applicationDisplay.setTitle(imageToDisplay.getName());
+        } catch (NoImageException e) {
+
+        }
+
+
     }
 }
