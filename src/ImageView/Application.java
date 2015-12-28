@@ -90,12 +90,7 @@ public class Application extends JFrame implements ApplicationDisplay {
         createNextShortcut();
         createPrevShortcut();
     }
-/*
-    @Override
-    public void setTitle(String name) {
-        this.setTitle(name);
-    }
-*/
+
     @Override
     public ImageDisplay getImageDisplay() {
         return this.imagePanel;
